@@ -6,42 +6,37 @@ const StringGeneration = () => {
     price: "number",
     Brand: "string",
   };
-  let stringCondition = {
-    equals: "==",
-    "not-equals": "!=",
-    contain: "%LIKE%",
-    "not-contain": "!%LIKE%",
-  };
-  let intConditions = {
-    equals: "==",
-    "not-equals": "!=",
-    "Less-Than-equals": "<=",
-    "Greater-than-equals": " >= ",
-  };
-  const [condition, setCondition] = useState<any>(stringCondition);
+  let stringCondition = [
+    "==",
+     "!=",
+    "%LIKE%",
+     "!%LIKE%",
+  ];
+  let intConditions = [
+    "==",
+    "!=",
+    "<=",
+    " >= ",
+  ];
   const [arr, setArr] = useState<any>([
     { content: "title", condition: "==", quantity: "" },
   ]);
-  const [selCondition, setConditions] = useState<any>("&&");
-  const selectRef1 = useRef<HTMLSelectElement>(null);
+  const [selCondition, setConditions] = useState<any>("All Condition");
+  const selectRef1 = useRef<any>([]);
+  const selectRef2 = useRef<any>([]);
   // for radio button selection
   const radioSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value == "All Condition") {
-      console.log("fdsg");
-      setConditions("&&");
+      setConditions("All Condition");
     } else {
-      setConditions("||");
+      setConditions("Any Condition");
     }
   };
   // for selecthandler key
   const selectHandler = (e: any, i: number) => {
     arr[i].content = e.target.value;
+    console.log(selectRef1.current[i].value);
     setArr([...arr]);
-    if (e.target.value == "Title" || e.target.value == "Brand") {
-      setCondition(stringCondition);
-    } else {
-      setCondition(intConditions);
-    }
   };
   // for selecthandler condition
   const conditionHandler = (e: any, i: number) => {
@@ -70,6 +65,14 @@ const StringGeneration = () => {
     arr.splice(i, 1);
     setArr([...arr]);
   };
+  const conditionRender=()=>{
+    let stringCondition=" ";
+    let selconditions=selCondition=="All Condition"? "&&":"||";
+    arr.map((item:any)=>{
+      stringCondition+=item.content+item.condition+item.quantity+selconditions
+    })
+    return stringCondition.substring(0,stringCondition.length-2);
+  }
   return (
     <div className="container p-5 ">
       <div className="col-8 m-auto">
@@ -104,6 +107,7 @@ const StringGeneration = () => {
               </div>
             </div>
             {arr.map((item: any, i: number) => {
+              let selConditions : string[]=(item.content=="Title" || item.content=="Brand")?stringCondition:intConditions;
               return (
                 <>
                   <div
@@ -113,8 +117,8 @@ const StringGeneration = () => {
                     <select
                       className="inp"
                       onChange={(e) => selectHandler(e, i)}
-                      ref={selectRef1}
-                      value={item.content}
+                      ref={(ref)=>selectRef1.current[i]=ref}
+                      value={item.key}
                     >
                       {Object.keys(keysValue).map((item) => {
                         return <option value={item}>{item}</option>;
@@ -122,10 +126,11 @@ const StringGeneration = () => {
                     </select>
                     <select
                       className="inp"
+                      ref={(ref)=>selectRef2.current[i]={ref}}
                       onChange={(e) => conditionHandler(e, i)}
                       value={item.condition}
                     >
-                      {Object.values(condition).map((item: any) => {
+                      {selConditions.map((item: any) => {
                         return <option>{item}</option>;
                       })}
                     </select>
@@ -155,14 +160,7 @@ const StringGeneration = () => {
               Add More
             </button>
             <span> Condition :</span>
-            {arr.map((item: any) => {
-              return (
-                <span>
-                  {item.content} = {item.condition} {item.quantity}{" "}
-                  {selCondition}{" "}
-                </span>
-              );
-            })}
+            {conditionRender()}
           </div>
         </div>
       </div>
