@@ -24,8 +24,7 @@ const StringGeneration = () => {
   ]);
   const [selCondition, setConditions] = useState<any>("&&");
   const selectRef1 = useRef<HTMLSelectElement>(null);
-  const inpRef = useRef<any>([]);
-  let x = "";
+  // for radio button selection
   const radioSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value == "All Condition") {
       console.log("fdsg");
@@ -34,6 +33,7 @@ const StringGeneration = () => {
       setConditions("||");
     }
   };
+  // for selecthandler key
   const selectHandler = (e: any, i: number) => {
     arr[i].content = e.target.value;
     setArr([...arr]);
@@ -43,15 +43,18 @@ const StringGeneration = () => {
       setCondition(intConditions);
     }
   };
+  // for selecthandler condition
   const conditionHandler = (e: any, i: number) => {
     arr[i].condition = e.target.value;
     setArr([...arr]);
   };
+  // for select input value
   const inpHandler = (e: any, i: any) => {
     console.log(e.target.value);
     arr[i].quantity = e.target.value;
     setArr([...arr]);
   };
+  // for add row
   const addRow = () => {
     console.log(arr[arr.length - 1].quantity);
     if (arr[arr.length - 1].quantity == "") {
@@ -61,12 +64,12 @@ const StringGeneration = () => {
       setArr([...arr]);
     }
   };
+  // for delete row
   const deleteRow = (i: number) => {
     console.log(i);
     arr.splice(i, 1);
     setArr([...arr]);
   };
-  console.log(arr);
   return (
     <div className="container p-5 ">
       <div className="col-8 m-auto">
