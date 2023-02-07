@@ -1,5 +1,7 @@
 import React, { useRef, useState } from "react";
+
 const StringGeneration = () => {
+  
   let keysValue = {
     Title: "String",
     Quantity: "number",
@@ -7,19 +9,19 @@ const StringGeneration = () => {
     Brand: "string",
   };
   let stringCondition = [
-    "==",
-     "!=",
-    "%LIKE%",
-     "!%LIKE%",
+    "Equals(==)",
+    "Not Equals(!=)",
+    "Contain(%LIKE%)",
+    "Not Contain(!%LIKE%)",
   ];
   let intConditions = [
-    "==",
-    "!=",
-    "<=",
-    " >= ",
+    "Equals(==)",
+    "Not Equals(!=)",
+    "Less Than Equal to(<=)",
+    "Greater than Equal To(>=)",
   ];
   const [arr, setArr] = useState<any>([
-    { content: "title", condition: "==", quantity: "" },
+    { content: "Title", condition: "==", quantity: "" },
   ]);
   const [selCondition, setConditions] = useState<any>("All Condition");
   const selectRef1 = useRef<any>([]);
@@ -34,12 +36,14 @@ const StringGeneration = () => {
   };
   // for selecthandler key
   const selectHandler = (e: any, i: number) => {
+    
     arr[i].content = e.target.value;
     console.log(selectRef1.current[i].value);
     setArr([...arr]);
   };
   // for selecthandler condition
   const conditionHandler = (e: any, i: number) => {
+    console.log(e.target.value)
     arr[i].condition = e.target.value;
     setArr([...arr]);
   };
@@ -55,7 +59,7 @@ const StringGeneration = () => {
     if (arr[arr.length - 1].quantity == "") {
       alert("Please fill the field");
     } else {
-      arr.push({ content: "title", condition: "==", quantity: "" });
+      arr.push({ content: "Title", condition: "==", quantity: "" });
       setArr([...arr]);
     }
   };
@@ -65,14 +69,14 @@ const StringGeneration = () => {
     arr.splice(i, 1);
     setArr([...arr]);
   };
-  const conditionRender=()=>{
-    let stringCondition=" ";
-    let selconditions=selCondition=="All Condition"? "&&":"||";
-    arr.map((item:any)=>{
-      stringCondition+=item.content+item.condition+item.quantity+selconditions
-    })
-    return stringCondition.substring(0,stringCondition.length-2);
-  }
+  const conditionRender = () => {
+    let stringCondition = " ";
+    let selconditions = selCondition == "All Condition" ? "&&" : "||";
+    arr.map((item: any) => {
+      stringCondition +=item.content +" "+ item.condition+" "+ item.quantity + selconditions;  
+    });
+    return stringCondition.substring(0, stringCondition.length - 2);
+  };
   return (
     <div className="container p-5 ">
       <div className="col-8 m-auto">
@@ -107,7 +111,12 @@ const StringGeneration = () => {
               </div>
             </div>
             {arr.map((item: any, i: number) => {
-              let selConditions : string[]=(item.content=="Title" || item.content=="Brand")?stringCondition:intConditions;
+              let selConditions: string[];
+              selConditions =
+                item.content == "Title" || item.content == "Brand"
+                  ? stringCondition
+                  : intConditions;
+              // console.log(selConditions);
               return (
                 <>
                   <div
@@ -117,7 +126,7 @@ const StringGeneration = () => {
                     <select
                       className="inp"
                       onChange={(e) => selectHandler(e, i)}
-                      ref={(ref)=>selectRef1.current[i]=ref}
+                      ref={(ref) => (selectRef1.current[i] = ref)}
                       value={item.key}
                     >
                       {Object.keys(keysValue).map((item) => {
@@ -126,12 +135,12 @@ const StringGeneration = () => {
                     </select>
                     <select
                       className="inp"
-                      ref={(ref)=>selectRef2.current[i]={ref}}
+                      ref={(ref) => (selectRef2.current[i] = { ref })}
                       onChange={(e) => conditionHandler(e, i)}
                       value={item.condition}
                     >
                       {selConditions.map((item: any) => {
-                        return <option>{item}</option>;
+                        return <option value={item.substring(item.indexOf('(')+1,item.length-1)}>{item}</option>;
                       })}
                     </select>
                     <input
