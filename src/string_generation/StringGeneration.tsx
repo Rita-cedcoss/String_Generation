@@ -140,7 +140,7 @@ const StringGeneration = () => {
                       value={item.condition}
                     >
                       {selConditions.map((item: any) => {
-                        return <option value={item.substring(item.indexOf('(')+1,item.length-1)}>{item}</option>;
+                        return <option value={item.substring(item.indexOf('(')+1,item.length-1)}>{item.substring(0,item.indexOf('('))}</option>;
                       })}
                     </select>
                     <input
