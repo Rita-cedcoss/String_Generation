@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import StringGeneration from './string_generation/StringGeneration';
+import StringGeneration from './components/StringGeneration';
 
 function App() {
   return (
